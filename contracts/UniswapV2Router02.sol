@@ -9,6 +9,9 @@ import './libraries/SafeMath.sol';
 import './interfaces/IERC20.sol';
 import './interfaces/IWETH.sol';
 
+/*
+上层DApp，即uniswap interface单页面前端程序，通过web3j和metamask等钱包调用UniswapV2Router02与uniswap智能合约交互。
+*/
 contract UniswapV2Router02 is IUniswapV2Router02 {
     using SafeMath for uint;
 
