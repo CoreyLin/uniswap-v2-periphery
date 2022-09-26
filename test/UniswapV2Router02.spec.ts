@@ -23,35 +23,35 @@ describe('UniswapV2Router02', () => {
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
     gasLimit: 9999999
   })
-  const [wallet] = provider.getWallets()
+  const [wallet] = provider.getWallets() // 获取钱包
   const loadFixture = createFixtureLoader(provider, [wallet])
 
   let token0: Contract
   let token1: Contract
   let router: Contract
   beforeEach(async function() {
-    const fixture = await loadFixture(v2Fixture)
+    const fixture = await loadFixture(v2Fixture) // 加载v2Fixture，其中完成了各种合约的部署
     token0 = fixture.token0
     token1 = fixture.token1
     router = fixture.router02
   })
 
   it('quote', async () => {
-    expect(await router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(200))).to.eq(bigNumberify(2))
+    expect(await router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(200))).to.eq(bigNumberify(2)) // 参数是uint amountA, uint reserveA, uint reserveB，求amountB
     expect(await router.quote(bigNumberify(2), bigNumberify(200), bigNumberify(100))).to.eq(bigNumberify(1))
-    await expect(router.quote(bigNumberify(0), bigNumberify(100), bigNumberify(200))).to.be.revertedWith(
+    await expect(router.quote(bigNumberify(0), bigNumberify(100), bigNumberify(200))).to.be.revertedWith( // 异常场景1
       'UniswapV2Library: INSUFFICIENT_AMOUNT'
     )
-    await expect(router.quote(bigNumberify(1), bigNumberify(0), bigNumberify(200))).to.be.revertedWith(
+    await expect(router.quote(bigNumberify(1), bigNumberify(0), bigNumberify(200))).to.be.revertedWith( // 异常场景2
       'UniswapV2Library: INSUFFICIENT_LIQUIDITY'
     )
-    await expect(router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(0))).to.be.revertedWith(
+    await expect(router.quote(bigNumberify(1), bigNumberify(100), bigNumberify(0))).to.be.revertedWith( // 异常场景3
       'UniswapV2Library: INSUFFICIENT_LIQUIDITY'
     )
   })
 
   it('getAmountOut', async () => {
-    expect(await router.getAmountOut(bigNumberify(2), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(1))
+    expect(await router.getAmountOut(bigNumberify(2), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(1)) // 参数为amountIn,reserveIn,reserveOut，求amountOut
     await expect(router.getAmountOut(bigNumberify(0), bigNumberify(100), bigNumberify(100))).to.be.revertedWith(
       'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT'
     )
@@ -64,7 +64,7 @@ describe('UniswapV2Router02', () => {
   })
 
   it('getAmountIn', async () => {
-    expect(await router.getAmountIn(bigNumberify(1), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(2))
+    expect(await router.getAmountIn(bigNumberify(1), bigNumberify(100), bigNumberify(100))).to.eq(bigNumberify(2)) // 参数为amountOut,reserveIn,reserveOut，求amountIn
     await expect(router.getAmountIn(bigNumberify(0), bigNumberify(100), bigNumberify(100))).to.be.revertedWith(
       'UniswapV2Library: INSUFFICIENT_OUTPUT_AMOUNT'
     )
